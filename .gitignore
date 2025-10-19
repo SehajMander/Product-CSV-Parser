@@ -1,0 +1,76 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+*.csv
+
+# -------------------------
+# Environments
+# -------------------------
+env/
+venv/
+myenv/
+.venv/
+ENV/
+.env
+.env.*
+
+# -------------------------
+# IDE / Editors
+# -------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -------------------------
+# Byte-compiled / Package files
+# -------------------------
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# -------------------------
+# Testing
+# -------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+
+# -------------------------
+# Docker
+# -------------------------
+*.pid
+*.tar
+*.bak
+*.tmp
+Dockerfile~
+docker-compose.override.yml
+
+# -------------------------
+# Misc
+# -------------------------
+.DS_Store
+Thumbs.db
+*.zip
+*.rar
