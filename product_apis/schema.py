@@ -2,6 +2,7 @@ from pydantic import BaseModel, validator
 from typing import Optional
 
 class ProductCreate(BaseModel):
+    """Schema for creating new products"""
     sku: str
     name: str
     brand: str
@@ -12,18 +13,21 @@ class ProductCreate(BaseModel):
     quantity: int
 
     @validator("mrp", "price")
-    def must_be_non_negative(cls, v):
-        if v < 0:
-            raise ValueError("value must be non-negative")
-        return v
+    def validate_pricing_values(cls, value):
+        """Ensure pricing values are not negative"""
+        if value < 0:
+            raise ValueError("Pricing values must be non-negative")
+        return value
 
     @validator("quantity")
-    def quantity_non_negative(cls, v):
-        if v < 0:
-            raise ValueError("quantity must be >= 0")
-        return v
+    def validate_quantity(cls, value):
+        """Ensure quantity is not negative"""
+        if value < 0:
+            raise ValueError("Quantity must be greater than or equal to 0")
+        return value
 
 class ProductOut(BaseModel):
+    """Schema for returning product data"""
     sku: str
     name: str
     brand: str
@@ -34,4 +38,5 @@ class ProductOut(BaseModel):
     quantity: int
 
     class Config:
-        orm_mode = True
+        """Pydantic configuration"""
+        orm_mode = True  # Enable ORM mode for SQLAlchemy integration

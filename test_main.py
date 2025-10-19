@@ -1,34 +1,40 @@
 from fastapi.testclient import TestClient
 from main import app
 
-client = TestClient(app)
+# Create test client for API testing
+test_client = TestClient(app)
 
-def test_health_check():
-    response = client.get("/")
-    assert response.status_code == 200
-    assert "API" in response.json()["message"]
+def test_api_health_check():
+    """Test that the API health endpoint is working"""
+    health_response = test_client.get("/")
+    assert health_response.status_code == 200
+    assert "API" in health_response.json()["message"]
 
-def test_upload_csv():
-    with open("products.csv", "rb") as f:
-        response = client.post("/upload", files={"file": ("products.csv", f, "text/csv")})
-    assert response.status_code == 200
-    data = response.json()
-    assert "stored" in data
-    assert "failed" in data
-    assert isinstance(data["failed"], list)
+def test_csv_file_upload():
+    """Test uploading a CSV file with product data"""
+    with open("products.csv", "rb") as csv_file:
+        upload_response = test_client.post("/upload", files={"file": ("products.csv", csv_file, "text/csv")})
+    
+    assert upload_response.status_code == 200
+    response_data = upload_response.json()
+    assert "stored" in response_data
+    assert "failed" in response_data
+    assert isinstance(response_data["failed"], list)
 
-def test_get_all_products():
-    response = client.get("/products")
-    assert response.status_code == 200
-    data = response.json()
-    assert isinstance(data, list)
-    assert len(data) > 0
-    assert "name" in data[0]
+def test_get_products_list():
+    """Test retrieving the list of products"""
+    products_response = test_client.get("/products")
+    assert products_response.status_code == 200
+    products_data = products_response.json()
+    assert isinstance(products_data, list)
+    assert len(products_data) > 0
+    assert "name" in products_data[0]
 
-def test_filter_by_brand():
-    response = client.get("/products/search?brand=StreamThreads")
-    assert response.status_code == 200
-    data = response.json()
-    assert isinstance(data, list)
-    for product in data:
-        assert product["brand"] == "StreamThreads"
+def test_search_products_by_brand():
+    """Test filtering products by brand name"""
+    search_response = test_client.get("/products/search?brand=StreamThreads")
+    assert search_response.status_code == 200
+    search_results = search_response.json()
+    assert isinstance(search_results, list)
+    for product_item in search_results:
+        assert product_item["brand"] == "StreamThreads"
